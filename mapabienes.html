@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Points on a map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+h1, h2, h3, p {
+margin: 5px;
+}
+.mapboxgl-popup-content {
+padding: 0;
+}
+      #map {
+        align:left;
+        width: 100%;
+        height: 600px;
+      }
+
+      #info{
+
+      }
+    </style>
+
+
+
+    <div id="map">
+      <div id="info"><h3>Mapa de los bienes patrimoniales y ministeriales del estado.</h3></div>
+
+    </div>
+
+    <div id="map" style="position:absolute; width: 400px; height: 300px;"></div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmV3dHJhbCIsImEiOiJjazJrcDY4Y2gxMmg3M2JvazU4OXV6NHZqIn0.VO5GkvBq_PSJHvX7T8H9jQ';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/newtral/cklhqwmoq0tvv17pa4jpg9750',
+      center: [-3.7492,40.4637],
+      zoom: 5,
+    });
+
+//display pop-up
+
+    map.on('click', function(e) {
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['patrimonio'] // replace this with the name of the layer
+  });
+
+  if (!features.length) {
+    return;
+  }
+
+  var feature = features[0];
+
+  var popup = new mapboxgl.Popup({ offset: [0, -10] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(`<h2 style="background-color:#80DFAD; margin: 0; padding: 5px;">Bienes Patrimoniales</h2><h3>Localidad</h3><p>${feature.properties.localidad}</p></h3><h3>Superficie</h3><p>${feature.properties.superficie}</p><h3>Tipo</h3><p>${feature.properties.tipo}</p><h3>Localización</h3><p>${feature.properties.localizacion}</p>`)
+    .addTo(map);
+});
+map.on('click', function(e) {
+var features = map.queryRenderedFeatures(e.point, {
+layers: ['ministerios'] // replace this with the name of the layer
+});
+
+if (!features.length) {
+return;
+}
+
+var feature = features[0];
+
+var popup = new mapboxgl.Popup({ offset: [0, -10] })
+.setLngLat(feature.geometry.coordinates)
+.setHTML(`<h2 style="background-color:#446078; color:#FFFFFF; margin: 0; padding: 5px;">Bienes ministeriales</h2><h3>Localidad</h3><p>${feature.properties.Localidad}</p></h3><h3>Superficie</h3><p>${feature.properties.Superficie}</p><h3>Uso</h3></p><p>${feature.properties.Uso}</p><h3>Localización</h3><p>${feature.properties.Localización}</p>`)
+.addTo(map);
+});
+map.addControl(new mapboxgl.NavigationControl());
+
+  </script>
+  </body>
+
+
+
+</html>
